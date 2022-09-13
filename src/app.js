@@ -1,7 +1,9 @@
 const express = require('express');
 const cors = require('cors');
 const httpStatus = require('http-status');
+const passport = require('passport');
 const routes = require('./route');
+const { jwtStrategy } = require('./config/passport');
 const { errorConverter, errorHandler } = require('./middlewares/error');
 const ApiError = require('./helper/ApiError');
 
@@ -30,6 +32,10 @@ app.use((req, res, next) => {
 
 // convert error to ApiError, if needed
 app.use(errorConverter);
+
+// jwt authentication
+app.use(passport.initialize());
+passport.use('jwt', jwtStrategy);
 
 // handle error
 app.use(errorHandler);
